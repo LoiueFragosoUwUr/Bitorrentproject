@@ -5,6 +5,7 @@ package com.upiita.bittorrent.server;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
+import com.upiita.bittorrent.model.Nodo;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;

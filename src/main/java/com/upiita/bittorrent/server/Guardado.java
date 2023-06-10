@@ -6,6 +6,7 @@ package com.upiita.bittorrent.server;
  */
 
 
+import com.upiita.bittorrent.model.Nodo;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
