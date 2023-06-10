@@ -8,6 +8,7 @@ package com.upiita.bittorrent.node;
 import com.upiita.bittorrent.model.FileInformation;
 import com.upiita.bittorrent.model.Nodo;
 import com.upiita.bittorrent.node.controller.ClientManager;
+import com.upiita.bittorrent.node.rmi.main.ServerClientRMI;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Scanner;
@@ -31,19 +32,50 @@ public class NodeMain {
             System.out.println("Si \t s");
             System.out.println("No \t ingrese cualquier tecla");
             
-            opt = scanner.next().charAt(0);
+            opt = scanner.nextLine().charAt(0);
             
             if(opt == 's'){
                 clientManager = new ClientManager();
                 List<FileInformation> files = clientManager.getFilesToShare();
                 Nodo node = clientManager.createNodeToShare(files);
+                ServerClientRMI server = new ServerClientRMI(6000, "FileTransfers");
+                server.start();
                 
             }
-            else{
-                
+            
+            do{
+                System.out.println("¿Que deseas?");
+                System.out.println("a. Ver descargas");
+                System.out.println("b. Descargar un archivo");
+                System.out.println("d. Salir");
+                opt = scanner.nextLine().charAt(0);
+
+                if(opt == 'a'){
+                        
+                    printDownloadedFiles();
+                    
+                }
+                else if(opt == 'b'){
+                    
+                }
             }
+            while(opt != 'd');
+           
         }
         while(opt != 'd');
     }
+    
+    
+    public static void printDownloadedFiles(){
+        ClientManager clientManager = new ClientManager();
+        List<FileInformation> files = clientManager.getFilesToShare();
+        
+        for(FileInformation file: files){
+            System.out.println("Nombre\tTamanio\tPorcentaje");
+            System.out.println(file.getNameFile() + "\t" + file.getSize() +" bytes\t" + file.getPercentage() + "%");
+        }
+    }
+    
+    
     
 }
