@@ -1,4 +1,4 @@
-package com.upiita.bittorrent.server;
+package com.upiita.bittorrent.server.rmi;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -10,10 +10,12 @@ package com.upiita.bittorrent.server;
  *
  * @author biosh
  */
-import java.rmi.Remote;
-import java.rmi.RemoteException;
-public interface SharestheIP extends Remote{
-    String SharestheIPwithTracker() throws RemoteException;
-    
-    
+import java.rmi.*;
+
+public interface ReceiveMessageInterface extends Remote
+
+{
+
+    void receiveMessage(String x) throws RemoteException;
+
 }

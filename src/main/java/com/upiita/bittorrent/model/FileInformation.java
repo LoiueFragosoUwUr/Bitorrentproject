@@ -5,13 +5,14 @@
  */
 package com.upiita.bittorrent.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author iarog
  */
-public class FileInformation {
+public class FileInformation implements Serializable{
     
     private String nameFile;
     private double size;

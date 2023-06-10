@@ -5,6 +5,11 @@ package com.upiita.bittorrent.server;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
+import com.upiita.bittorrent.server.rmi.InformsItstheTracker;
+import com.upiita.bittorrent.server.rmi.FileTransfer;
+import com.upiita.bittorrent.model.Nodo;
+import com.upiita.bittorrent.server.dao.DAO;
+import com.upiita.bittorrent.server.dao.file.FileNodoDAO;
 import java.net.InetAddress;  
 import java.net.UnknownHostException;  
 import java.net.InetAddress;
@@ -37,26 +42,20 @@ public class FirstStepTracker extends UnicastRemoteObject  implements FileTransf
               return "ImtheTracker";
     }   
     @Override
-    public void SharesIP(String IP, String port) throws IOException{
+    public void SharesIP( Nodo node) throws IOException{
     
-        InetAddress hostip = InetAddress.getLocalHost();
-        String hostaddress= hostip.getHostAddress();
-        IP=hostaddress;
-        port=port;
-                System.out.println("Received IP addresses");
-                if (receivedIPs.contains(hostaddress)!=true) {
-                    receivedIPs.add(hostaddress);
-                    for (int i = 0; i < receivedIPs.size(); i++) {
-                        System.out.println(receivedIPs.get(i));
-                    }
-                }
-                printslist();
+        DAO fileNodoDAO = new FileNodoDAO();
+        fileNodoDAO.create(node);
+        
+    
+        
     }
     public FirstStepTracker() throws RemoteException{super();}
 //    @Override
-    public /*String*/void SendsIP (String IP)throws RemoteException,IOException{
-    
-        System.out.println(IP);
+    public List <Nodo> SendsIP ()throws RemoteException,IOException{
+            DAO fileNodoDAO = new FileNodoDAO();
+            return fileNodoDAO.list();
+        
     }
     @Override
     public String transferFile(byte[] data, String filename)throws RemoteException,IOException{

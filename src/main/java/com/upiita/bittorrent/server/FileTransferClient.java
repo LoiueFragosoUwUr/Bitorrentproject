@@ -10,6 +10,8 @@ package com.upiita.bittorrent.server;
  *
  * @author biosh
  */
+import com.upiita.bittorrent.server.rmi.InformsItstheTracker;
+import com.upiita.bittorrent.server.rmi.FileTransfer;
 import java.io.*;
 import java.net.InetAddress;
 import java.rmi.NotBoundException;

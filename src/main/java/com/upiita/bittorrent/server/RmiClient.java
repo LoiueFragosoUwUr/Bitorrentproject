@@ -10,6 +10,7 @@ package com.upiita.bittorrent.server;
  *
  * @author biosh
  */
+import com.upiita.bittorrent.server.rmi.ReceiveMessageInterface;
 import java.rmi.*;
 import java.rmi.registry.*;
 import java.net.*;

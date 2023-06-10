@@ -1,4 +1,4 @@
-package com.upiita.bittorrent.server;
+package com.upiita.bittorrent.server.rmi;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -10,15 +10,17 @@ package com.upiita.bittorrent.server;
  *
  * @author biosh
  */
+import com.upiita.bittorrent.model.Nodo;
 import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.*;
+import java.util.List;
 public interface InformsItstheTracker extends Remote{
         
         String ImtheTracker() throws RemoteException;
-        void SharesIP(String ip, String port) throws RemoteException,IOException;
-        /*String*/void SendsIP(String x)throws RemoteException,IOException;
+        void SharesIP(Nodo node) throws RemoteException,IOException;
+        List <Nodo> SendsIP()throws RemoteException,IOException;
                
 
 
