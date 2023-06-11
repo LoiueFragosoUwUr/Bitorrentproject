@@ -44,9 +44,9 @@ public class FirstStepTracker extends UnicastRemoteObject implements  InformsIts
     }
 //    @Override
 
-    public List<Nodo> SendsIP(String fileName) throws RemoteException, IOException {
+    public ArrayList<Nodo> SendsIP(String fileName) throws RemoteException, IOException {
         DAO fileNodoDAO = new FileNodoDAO();
-        List<Nodo> nodes = fileNodoDAO.list();
+        ArrayList<Nodo> nodes = (ArrayList<Nodo>) fileNodoDAO.list();
         for (int i = 0; i < nodes.size(); i++) {
             List<FileInformation> fileInformation = new ArrayList<>();
             
@@ -82,7 +82,7 @@ public class FirstStepTracker extends UnicastRemoteObject implements  InformsIts
         String IPrecibida;
         try {
             FirstStepTracker server = new FirstStepTracker();
-            ManagementConn nuevo = new ManagementConn();
+            //ManagementConn nuevo = new ManagementConn();
             Registry registry = LocateRegistry.createRegistry(1099);
             registry.bind("InformsItstheTracker", server);
             System.out.println("Server ready");
@@ -95,10 +95,10 @@ public class FirstStepTracker extends UnicastRemoteObject implements  InformsIts
     }
 
     @Override
-    public List<FileInformation> ListFiles() {
+    public ArrayList<FileInformation> ListFiles() {
         DAO nodoDAO = new FileNodoDAO();
         List<Nodo> nodos = nodoDAO.list();
-        List<FileInformation> files = new ArrayList<>();
+        ArrayList<FileInformation> files = new ArrayList<>();
         for (Nodo nodo : nodos) {
 
             for (FileInformation file : nodo.getFiles()) {

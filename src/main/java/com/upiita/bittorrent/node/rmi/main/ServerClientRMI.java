@@ -6,7 +6,6 @@
 package com.upiita.bittorrent.node.rmi.main;
 
 import com.upiita.bittorrent.node.rmi.controller.ControllerClientRMI;
-import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;

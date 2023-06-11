@@ -15,14 +15,13 @@ import com.upiita.bittorrent.model.Nodo;
 import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.rmi.*;
 import java.util.List;
 public interface InformsItstheTracker extends Remote{
         
         String ImtheTracker() throws RemoteException;
         void SharesIP(Nodo node) throws RemoteException,IOException;
         List <Nodo> SendsIP(String fileName)throws RemoteException,IOException;
-        List <FileInformation> ListFiles();
+        List <FileInformation> ListFiles() throws RemoteException;
                
 
 
