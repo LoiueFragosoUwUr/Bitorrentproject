@@ -10,6 +10,7 @@ package com.upiita.bittorrent.server.rmi;
  *
  * @author biosh
  */
+import com.upiita.bittorrent.model.FileInformation;
 import com.upiita.bittorrent.model.Nodo;
 import java.io.IOException;
 import java.rmi.Remote;
@@ -20,7 +21,8 @@ public interface InformsItstheTracker extends Remote{
         
         String ImtheTracker() throws RemoteException;
         void SharesIP(Nodo node) throws RemoteException,IOException;
-        List <Nodo> SendsIP()throws RemoteException,IOException;
+        List <Nodo> SendsIP(String fileName)throws RemoteException,IOException;
+        List <FileInformation> ListFiles();
                
 
 
