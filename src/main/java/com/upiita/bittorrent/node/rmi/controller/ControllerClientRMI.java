@@ -48,7 +48,7 @@ public class ControllerClientRMI extends UnicastRemoteObject implements ClientRM
             }
         }
         
-        try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream( props.getProperty("staticDirectoryClient")
+        try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream( System.getProperty("user.dir") + props.getProperty("staticDirectoryClient")
                 + props.getProperty("directoryFragments") + "\\" + ClientManager.accoplishFragment(fileName, fragment)))){
             byte [] buffer = new byte[(int) file.getSize()/(Integer.parseInt(props.getProperty("sizePackage")))];
             
@@ -59,7 +59,7 @@ public class ControllerClientRMI extends UnicastRemoteObject implements ClientRM
             bis.close();
         }
         catch(Exception ex){
-            
+            ex.printStackTrace();
         }
         
         return data;
