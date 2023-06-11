@@ -37,7 +37,7 @@ public class Torrent extends TimerTask{
         }
         
         Timer timer = new Timer();
-        timer.schedule(this, Integer.parseInt(props.getProperty("initTorrent")), props.getProperty(Integer.parseInt("intervalTorrent")));
+        timer.schedule(this, Integer.parseInt(props.getProperty("initTorrent")), Integer.parseInt(props.getProperty("intervalTorrent")));
         
         props = new Properties();
         try(FileInputStream fis = new FileInputStream(System.getProperty("user.dir") + "\\bittorrent.properties")){
