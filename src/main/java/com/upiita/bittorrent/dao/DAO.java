@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package com.upiita.bittorrent.server.dao;
+package com.upiita.bittorrent.dao;
 
 import java.util.List;
 
@@ -15,5 +15,6 @@ public interface DAO<Object> {
     public void update(Object object);
     public void delete(String s);
     public List<Object> list() ;
+    public void saveFile(List<Object> listaObject);
     
 }

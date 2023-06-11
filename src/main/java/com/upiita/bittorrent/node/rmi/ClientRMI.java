@@ -6,6 +6,7 @@
 package com.upiita.bittorrent.node.rmi;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -13,7 +14,7 @@ import java.rmi.Remote;
  */
 public interface ClientRMI extends Remote{
     
-    public boolean transferFile(byte [] data, String fileName, int id, int chunkSize);
-    public boolean ackConnection();
+    public byte[] transferFile(String fileName, int fragment) throws RemoteException;
+    public boolean ackConnection() throws RemoteException;
     
 }

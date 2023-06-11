@@ -29,33 +29,41 @@ public class ClientManager {
     
        public List<FileInformation> getFilesToShare(){
             List<FileInformation> files = new ArrayList<>();
-       
-           String actualDirectory = System.getProperty("user.dir");
-           String absoluteDirectory = actualDirectory + filesDirectory;
+            String absoluteDirectory = retrieveDirectory(filesDirectory);
            File direc = new File(absoluteDirectory);
            String [] listNames = direc.list();
            
            for(String fileName: listNames){
                
                File file = new File(absoluteDirectory + "\\"+fileName);
-               FileInformation fileInfo = new FileInformation(fileName, file.length(),100.0, 10);
+               List<Integer> listFragments = new ArrayList<>();
+               for(int i = 0; i < 10; i++){
+                   listFragments.add(i+1);
+               }
+               
+               FileInformation fileInfo = new FileInformation(fileName, file.length(),100.0, listFragments);
                
                files.add(fileInfo);
            }
            
-           absoluteDirectory = actualDirectory + fragmentsDirectory;
+           absoluteDirectory = retrieveDirectory(fragmentsDirectory);
            File direcFragments = new File(absoluteDirectory);
            listNames = direcFragments.list();
             
            for(String fileName: listNames){
                boolean encontrado = false;
                String [] fileNameSplited = fileName.split("_");
-               String originalFileName = fileNameSplited[0] + "."+ ((fileNameSplited[1].split("[.]"))[1]);
+               String [] numberExtension = fileNameSplited[1].split("[.]");
+               String originalFileName = fileNameSplited[0] + "."+ numberExtension[1];
                
                for(int i = 0; i < files.size(); i++){
                    if(files.get(i).getNameFile().equals(originalFileName)){
                        FileInformation fileAux = files.get(i);
                        fileAux.setPercentage(fileAux.getPercentage() + 10);
+                       
+                       List<Integer> listFragments = fileAux.getFragments();
+                       listFragments.add(Integer.parseInt(numberExtension[0]));
+                       fileAux.setFragments(listFragments);
                        files.set(i, fileAux);
                         encontrado = true;
                        break;
@@ -63,7 +71,9 @@ public class ClientManager {
                }
                
                if(!encontrado){
-                   FileInformation fileInfoExtra = new FileInformation(originalFileName, 1, 10, 10);
+                   List<Integer> listFragments = new ArrayList<>();
+                   listFragments.add(Integer.parseInt(numberExtension[0]));
+                   FileInformation fileInfoExtra = new FileInformation(originalFileName, 1, 10, listFragments);
                     files.add(fileInfoExtra);
                }
            }
@@ -82,4 +92,46 @@ public class ClientManager {
         return node;
         
     }
+    
+    public static String accoplishFragment(String nameFile, int fragment){
+        String []splitName = nameFile.split("[.]");
+        String completeName = splitName[0] + "_" +Integer.toString(fragment) + "." + splitName[1];
+        return completeName;
+    }
+    
+    public String retrieveDirectory(String directory){
+         String actualDirectory = System.getProperty("user.dir");
+        String absoluteDirectory = actualDirectory + directory;
+        return absoluteDirectory;
+    }
+    
+    public boolean verifyFragment(String nameFile, int fragment){
+        
+        boolean encontrado = false;
+        
+        String completeName = ClientManager.accoplishFragment(nameFile, fragment);
+        String absoluteDirectory = retrieveDirectory(fragmentsDirectory);
+        File direc = new File(absoluteDirectory);
+        String [] listNames = direc.list();
+        
+        for(String name: listNames){
+            if(encontrado = (name.equals(completeName))){
+                break;
+            }
+        }
+        
+        return encontrado;
+        
+    }
+
+    public String getFilesDirectory() {
+        return filesDirectory;
+    }
+
+    public String getFragmentsDirectory() {
+        return fragmentsDirectory;
+    }
+    
+    
+    
 }
