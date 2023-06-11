@@ -7,8 +7,10 @@ package com.upiita.bittorrent.node.controller;
 
 import com.upiita.bittorrent.model.FileInformation;
 import com.upiita.bittorrent.model.Nodo;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -23,10 +25,10 @@ public class ClientManager {
         private String staticDirectory;
         private String filesDirectory;
         private String fragmentsDirectory;
-    
+        Properties props;
         public ClientManager(){
             
-            Properties props = new Properties();
+            props = new Properties();
             try(FileInputStream fis = new FileInputStream(System.getProperty("user.dir") + "\\bittorrent.properties")){
                 props.load(fis);
                 staticDirectory = props.getProperty("staticDirectoryClient");
@@ -52,11 +54,18 @@ public class ClientManager {
                List<Integer> listFragments = new ArrayList<>();
                for(int i = 0; i < 10; i++){
                    listFragments.add(i+1);
+                   
+                    
                }
                
                FileInformation fileInfo = new FileInformation(fileName, file.length(),100.0, listFragments);
-               
                files.add(fileInfo);
+               try(FileInputStream fis = new FileInputStream(file)){
+                    fragmentFile(fis, (int)file.length(), fileName);
+                }
+                catch(Exception ex){
+
+                }
            }
            
            absoluteDirectory = retrieveDirectory(fragmentsDirectory);
@@ -116,6 +125,39 @@ public class ClientManager {
          String actualDirectory = System.getProperty("user.dir");
         String absoluteDirectory = actualDirectory + directory;
         return absoluteDirectory;
+    }
+    
+    private void fragmentFile(FileInputStream fis, int size, String fileName){
+        
+        try(BufferedInputStream bis = new BufferedInputStream(fis)){
+            int newSize = size/Integer.parseInt(props.getProperty("sizePackage"));
+            byte  [] buffer = new byte[newSize];
+            int read = 0;
+            int i = 0;
+            
+            while((read = bis.read(buffer)) != -1){
+                
+                String directory = retrieveDirectory(getFragmentsDirectory());
+                String completeName = accoplishFragment(fileName, i+1);
+                try(FileOutputStream fos = new FileOutputStream(directory + "\\" + completeName)){
+                    fos.write(buffer);
+                    fos.close();
+                }
+                catch(Exception ex){
+                    
+                }
+                finally{
+                    
+                }
+                
+                i ++;
+            }
+            bis.close();
+        }
+        catch(Exception ex){
+            
+        }
+        
     }
     
     public boolean verifyFragment(String nameFile, int fragment){

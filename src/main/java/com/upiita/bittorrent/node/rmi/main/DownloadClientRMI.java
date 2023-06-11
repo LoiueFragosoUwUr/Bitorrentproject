@@ -56,9 +56,7 @@ public class DownloadClientRMI extends Thread{
                    }
                    
                }
-            }
-            
-            
+            }   
             
         }
         catch(Exception ex){
