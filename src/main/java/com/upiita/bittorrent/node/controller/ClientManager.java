@@ -95,7 +95,7 @@ public class ClientManager {
                if(!encontrado){
                    List<Integer> listFragments = new ArrayList<>();
                    listFragments.add(Integer.parseInt(numberExtension[0]));
-                   File fileAuxi = new File(absoluteDirectory + "\\"+originalFileName);
+                   File fileAuxi = new File(absoluteDirectory + "\\"+fileName);
                    FileInformation fileInfoExtra = new FileInformation(originalFileName, Integer.parseInt(props.getProperty("sizePackage"))*fileAuxi.length(), 10, listFragments);
                     files.add(fileInfoExtra);
                }
