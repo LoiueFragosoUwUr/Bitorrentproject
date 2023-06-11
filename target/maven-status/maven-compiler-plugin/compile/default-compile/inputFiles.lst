@@ -3,6 +3,7 @@ D:\NetBeansProjects\Bitorrentproject\src\main\java\com\upiita\bittorrent\Averigu
 D:\NetBeansProjects\Bitorrentproject\src\main\java\com\upiita\bittorrent\server\rmi\controller\ManagementConn.java
 D:\NetBeansProjects\Bitorrentproject\src\main\java\com\upiita\bittorrent\server\rmi\InformsItstheTracker.java
 D:\NetBeansProjects\Bitorrentproject\src\main\java\com\upiita\bittorrent\node\rmi\main\DownloadClientRMI.java
+D:\NetBeansProjects\Bitorrentproject\src\main\java\com\upiita\bittorrent\node\rmi\main\Torrent.java
 D:\NetBeansProjects\Bitorrentproject\src\main\java\com\upiita\bittorrent\dao\file\FileTorrentDAO.java
 D:\NetBeansProjects\Bitorrentproject\src\main\java\com\upiita\bittorrent\node\controller\ClientManager.java
 D:\NetBeansProjects\Bitorrentproject\src\main\java\com\upiita\bittorrent\node\NodeMain.java
