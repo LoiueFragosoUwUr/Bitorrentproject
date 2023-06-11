@@ -5,11 +5,14 @@
  */
 package com.upiita.bittorrent.node;
 
+import com.upiita.bittorrent.dao.TorrentDAO;
+import com.upiita.bittorrent.dao.file.FileTorrentDAO;
 import com.upiita.bittorrent.model.FileInformation;
 import com.upiita.bittorrent.model.Nodo;
 import com.upiita.bittorrent.node.controller.ClientManager;
 import com.upiita.bittorrent.node.rmi.main.DownloadClientRMI;
 import com.upiita.bittorrent.node.rmi.main.ServerClientRMI;
+import com.upiita.bittorrent.node.rmi.main.Torrent;
 import com.upiita.bittorrent.server.rmi.InformsItstheTracker;
 import java.io.FileInputStream;
 import java.net.UnknownHostException;
@@ -44,7 +47,7 @@ public class NodeMain {
         do{
             
             
-            
+            Torrent torrent = new Torrent();
             System.out.println("Bienvenido a BitTorrentUPIITA");
             System.out.println("¿Quieres compartir tus recursos?");
             System.out.println("Si \t s");
@@ -95,10 +98,15 @@ public class NodeMain {
                         String nombre = scanner.nextLine();
                         List<Nodo> nodos = informsItsTracker.SendsIP(nombre);
                         
-                        for(Nodo nodo: nodos){
-                            DownloadClientRMI download = new DownloadClientRMI(nodo);
-                            download.start();
+                        if(nodos.isEmpty()){
+                            System.out.println("No existe el archivo solicitado, revisa el nombre");
                         }
+                        else{
+                            TorrentDAO torrentDao = new FileTorrentDAO(nodos.get(0).getFiles().get(0).getNameFile() + props.getProperty("extensionTorrent"));
+                            torrentDao.saveFile(nodos);
+                        }
+                        
+                        
                         
                     }
                     catch(Exception ex){

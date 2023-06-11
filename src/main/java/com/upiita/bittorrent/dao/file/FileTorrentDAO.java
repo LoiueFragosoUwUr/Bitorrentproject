@@ -7,6 +7,7 @@ package com.upiita.bittorrent.dao.file;
 
 import com.upiita.bittorrent.dao.TorrentDAO;
 import com.upiita.bittorrent.model.Nodo;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -30,7 +31,7 @@ public class FileTorrentDAO implements TorrentDAO{
         try(FileInputStream fis = new FileInputStream(System.getProperty("user.dir") + "\\bittorrent.properties")){
             props.load(fis);
             staticDirectory = props.getProperty("staticDirectoryClient") + props.getProperty("directoryTorrent");
-            nameFile = staticDirectory + "\\" + nameFile;
+            this.nameFile = staticDirectory + "\\" + nameFile;
         }
         catch(Exception ex){
             staticDirectory = "";
@@ -87,6 +88,18 @@ public class FileTorrentDAO implements TorrentDAO{
             }
         } catch (Exception e) {
 
+        }
+    }
+
+    @Override
+    public void deleteFile() {
+        File file = new File(System.getProperty("user.dir") + this.nameFile);
+        
+        if(file.delete()){
+            System.out.println("Archivo eliminado");
+        }
+        else{
+            System.out.println("Falla al momento de eliminar el archivo");
         }
     }
     

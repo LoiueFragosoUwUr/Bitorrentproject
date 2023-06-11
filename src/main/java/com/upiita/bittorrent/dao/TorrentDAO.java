@@ -13,5 +13,5 @@ import java.util.List;
  * @author iarog
  */
 public interface TorrentDAO extends DAO<Nodo>{
-    
+    public void deleteFile();
 }
