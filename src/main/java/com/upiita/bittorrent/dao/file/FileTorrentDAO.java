@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  *
@@ -20,11 +21,23 @@ import java.util.List;
  */
 public class FileTorrentDAO implements TorrentDAO{
     
-    private final String staticDirectory = "\\clientresources\\torrents";
-    private final String nameFile;
+    private String staticDirectory;
+    private String nameFile;
     
     public FileTorrentDAO(String nameFile){
-        this.nameFile = staticDirectory + "\\" + nameFile;
+        
+        Properties props = new Properties();
+        try(FileInputStream fis = new FileInputStream(System.getProperty("user.dir") + "\\bittorrent.properties")){
+            props.load(fis);
+            staticDirectory = props.getProperty("staticDirectoryClient") + props.getProperty("directoryTorrent");
+            nameFile = staticDirectory + "\\" + nameFile;
+        }
+        catch(Exception ex){
+            staticDirectory = "";
+            nameFile= "";
+            System.exit(1);
+        }
+
     }
     
     @Override

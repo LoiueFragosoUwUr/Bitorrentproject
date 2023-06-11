@@ -13,15 +13,24 @@ import java.io.FileInputStream;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
+import java.util.Properties;
 
 /**
  *
  * @author iarog
  */
 public class ControllerClientRMI extends UnicastRemoteObject implements ClientRMI {
-    
+    Properties props;
     public ControllerClientRMI() throws RemoteException{
-        super();
+         super();
+        props = new Properties();
+        try(FileInputStream fis = new FileInputStream(System.getProperty("user.dir") + "\\bittorrent.properties")){
+            props.load(fis);
+        }
+        catch(Exception ex){
+            System.exit(1);
+        }
+       
     }
 
     @Override
@@ -40,7 +49,7 @@ public class ControllerClientRMI extends UnicastRemoteObject implements ClientRM
         }
         
         try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream(ClientManager.accoplishFragment(fileName, fragment)))){
-            byte [] buffer = new byte[(int) file.getSize()/10];
+            byte [] buffer = new byte[(int) file.getSize()/(Integer.parseInt(props.getProperty("sizePackage")))];
             
             int bytesRead = 0;
             

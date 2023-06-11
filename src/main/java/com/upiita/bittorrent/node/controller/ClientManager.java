@@ -8,23 +8,36 @@ package com.upiita.bittorrent.node.controller;
 import com.upiita.bittorrent.model.FileInformation;
 import com.upiita.bittorrent.model.Nodo;
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  *
  * @author iarog
  */
 public class ClientManager {
-        private final String staticDirectory = "\\clientresources";
-        private final String filesDirectory;
-        private final String fragmentsDirectory;
+        private String staticDirectory;
+        private String filesDirectory;
+        private String fragmentsDirectory;
     
         public ClientManager(){
-            filesDirectory = staticDirectory + "\\files";
-            fragmentsDirectory = staticDirectory + "\\fragments";
+            
+            Properties props = new Properties();
+            try(FileInputStream fis = new FileInputStream(System.getProperty("user.dir") + "\\bittorrent.properties")){
+                props.load(fis);
+                staticDirectory = props.getProperty("staticDirectoryClient");
+                filesDirectory = staticDirectory + props.getProperty("directoryFiles");
+                fragmentsDirectory = staticDirectory + props.getProperty("directoryFragments");
+            }
+            catch(Exception ex){
+                staticDirectory = "";
+                System.exit(1);
+            }
+            
         }
     
        public List<FileInformation> getFilesToShare(){

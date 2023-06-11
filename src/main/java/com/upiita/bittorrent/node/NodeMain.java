@@ -11,10 +11,12 @@ import com.upiita.bittorrent.node.controller.ClientManager;
 import com.upiita.bittorrent.node.rmi.main.DownloadClientRMI;
 import com.upiita.bittorrent.node.rmi.main.ServerClientRMI;
 import com.upiita.bittorrent.server.rmi.InformsItstheTracker;
+import java.io.FileInputStream;
 import java.net.UnknownHostException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 /**
@@ -30,6 +32,15 @@ public class NodeMain {
         char opt;
         Scanner scanner = new Scanner(System.in);
         ClientManager clientManager;
+        
+        Properties props = new Properties();
+        try(FileInputStream fis = new FileInputStream(System.getProperty("user.dir") + "\\bittorrent.properties")){
+            props.load(fis);
+        }
+        catch(Exception ex){
+            System.exit(1);
+        }
+        
         do{
             
             
@@ -46,15 +57,17 @@ public class NodeMain {
                 List<FileInformation> files = clientManager.getFilesToShare();
                 Nodo node = clientManager.createNodeToShare(files);
                 try{
-                    Registry registry = LocateRegistry.getRegistry("localhost", 1099);
+                    System.setProperty("sun.rmi.transport.connectionTimeout", "40000");
+                    Registry registry = LocateRegistry.getRegistry(props.getProperty("ipTracker"), Integer.parseInt(props.getProperty("portTracker")));
                     
-                    InformsItstheTracker informsItsTracker = (InformsItstheTracker) registry.lookup("InformsItstheTracker");
+                    InformsItstheTracker informsItsTracker = (InformsItstheTracker) registry.lookup(props.getProperty("lookupTracker"));
                     informsItsTracker.SharesIP(node);
+                    
                 }
                 catch(Exception ex){
                     ex.printStackTrace();
                 }
-                ServerClientRMI server = new ServerClientRMI(1100, "FileTransfers");
+                ServerClientRMI server = new ServerClientRMI(Integer.parseInt(props.getProperty("portClient")), props.getProperty("lookupClient"));
                 server.start();
                 
             }
@@ -73,8 +86,8 @@ public class NodeMain {
                 }
                 else if(opt == 'b'){
                     try{
-                        Registry registry = LocateRegistry.getRegistry("localhost", 1099);
-                        InformsItstheTracker informsItsTracker = (InformsItstheTracker) registry.lookup("InformsItstheTracker");
+                        Registry registry = LocateRegistry.getRegistry(props.getProperty("ipTracker"), Integer.parseInt(props.getProperty("portTracker")));
+                        InformsItstheTracker informsItsTracker = (InformsItstheTracker) registry.lookup(props.getProperty("lookupTracker"));
                         List<FileInformation> listFiles  = informsItsTracker.ListFiles();
                         printList(listFiles);
                         

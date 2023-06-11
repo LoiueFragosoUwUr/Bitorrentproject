@@ -9,11 +9,11 @@ import com.upiita.bittorrent.model.FileInformation;
 import com.upiita.bittorrent.model.Nodo;
 import com.upiita.bittorrent.node.controller.ClientManager;
 import com.upiita.bittorrent.node.rmi.ClientRMI;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Properties;
 
 /**
  *
@@ -22,11 +22,18 @@ import java.rmi.registry.Registry;
 public class DownloadClientRMI extends Thread{
     
     private final Nodo node;
-    
+    Properties props;
     
     public DownloadClientRMI (Nodo node){
         super();
         this.node = node;
+        props = new Properties();
+        try(FileInputStream fis = new FileInputStream(System.getProperty("user.dir") + "\\bittorrent.properties")){
+            props.load(fis);
+        }
+        catch(Exception ex){
+            System.exit(1);
+        }
     }
     
     private void startDownload() {
@@ -34,7 +41,7 @@ public class DownloadClientRMI extends Thread{
             ClientManager clientManager = new ClientManager();
             Registry registry = LocateRegistry.getRegistry(node.getIp(), node.getPort());
             
-            ClientRMI clientRMI = (ClientRMI) registry.lookup("FileTransfers");
+            ClientRMI clientRMI = (ClientRMI) registry.lookup(props.getProperty("lookupClient"));
             FileInformation fileInformation = node.getFiles().get(0);
             
             for(int i = 0; i < fileInformation.getFragments().size(); i++){      

@@ -10,6 +10,7 @@ import com.upiita.bittorrent.model.Nodo;
 import com.upiita.bittorrent.dao.DAO;
 import com.upiita.bittorrent.dao.file.FileNodoDAO;
 import com.upiita.bittorrent.server.rmi.controller.ManagementConn;
+import java.io.FileInputStream;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -17,15 +18,13 @@ import java.rmi.server.UnicastRemoteObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  *
  * @author biosh
  */
 public class FirstStepTracker extends UnicastRemoteObject implements  InformsItstheTracker {
-
-    int port = 1099;
-    static List<String> receivedIPs = new ArrayList<String>();
 
     public String ImtheTracker() {
         return "ImtheTracker";
@@ -78,13 +77,21 @@ public class FirstStepTracker extends UnicastRemoteObject implements  InformsIts
 
     
     public static void main(String[] args) throws RemoteException, Exception {
-//        String srvrnm =args[0];
-        String IPrecibida;
+        
+        Properties props = new Properties();
+        try(FileInputStream fis = new FileInputStream(System.getProperty("user.dir") + "\\bittorrent.properties")){
+            props.load(fis);
+        }
+        catch(Exception ex){
+            System.exit(1);
+        }
+        
         try {
             FirstStepTracker server = new FirstStepTracker();
             ManagementConn nuevo = new ManagementConn();
-            Registry registry = LocateRegistry.createRegistry(1099);
-            registry.bind("InformsItstheTracker", server);
+            System.out.println(props.getProperty("lookupTracker"));
+            Registry registry = LocateRegistry.createRegistry(Integer.parseInt(props.getProperty("portTracker")));
+            registry.bind(props.getProperty("lookupTracker"), server);
             System.out.println("Server ready");
         } catch (Exception e) {
             System.err.println("Server exception: " + e.toString());

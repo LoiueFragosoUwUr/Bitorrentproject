@@ -8,9 +8,11 @@ import com.upiita.bittorrent.model.Nodo;
 import com.upiita.bittorrent.node.rmi.ClientRMI;
 import com.upiita.bittorrent.dao.DAO;
 import com.upiita.bittorrent.dao.file.FileNodoDAO;
+import java.io.FileInputStream;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
+import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -19,10 +21,17 @@ import java.util.TimerTask;
  * @author biosh
  */
 public class ManagementConn extends TimerTask {
-
+    Properties props;
     public ManagementConn() {
+        props = new Properties();
+        try(FileInputStream fis = new FileInputStream(System.getProperty("user.dir") + "\\bittorrent.properties")){
+            props.load(fis);
+        }
+        catch(Exception ex){
+            System.exit(1);
+        }
         Timer timer = new Timer();
-        timer.scheduleAtFixedRate(this, 1000, 5000);
+        timer.scheduleAtFixedRate(this, Integer.parseInt(props.getProperty("initCheckup")), Integer.parseInt(props.getProperty("checkupInterval")));
     }
 
     @Override
