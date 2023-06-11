@@ -44,6 +44,7 @@ public class ManagementConn extends TimerTask {
 
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 fileNodoDAO.delete(nodeList.get(i).getIp());
             }
 

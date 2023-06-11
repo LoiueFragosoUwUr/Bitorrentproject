@@ -87,7 +87,7 @@ public class ClientManager {
         InetAddress hostip = InetAddress.getLocalHost();
         String hostaddress = hostip.getHostAddress();
         
-        node = new Nodo(hostaddress, 6000, files);
+        node = new Nodo(hostaddress, 1100, files);
         
         return node;
         

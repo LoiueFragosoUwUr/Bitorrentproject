@@ -31,7 +31,7 @@ public class ServerClientRMI extends Thread{
     public void run(){
         Registry registry;
         try {
-            registry = LocateRegistry.getRegistry(port);
+            registry = LocateRegistry.createRegistry(port);
             registry.bind(rmiName, new ControllerClientRMI());
             System.out.println("Los recursos ya se estan compartiendo");
         } catch (RemoteException ex) {

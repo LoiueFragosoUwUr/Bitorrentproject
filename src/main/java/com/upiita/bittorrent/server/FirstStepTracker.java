@@ -82,7 +82,7 @@ public class FirstStepTracker extends UnicastRemoteObject implements  InformsIts
         String IPrecibida;
         try {
             FirstStepTracker server = new FirstStepTracker();
-            //ManagementConn nuevo = new ManagementConn();
+            ManagementConn nuevo = new ManagementConn();
             Registry registry = LocateRegistry.createRegistry(1099);
             registry.bind("InformsItstheTracker", server);
             System.out.println("Server ready");

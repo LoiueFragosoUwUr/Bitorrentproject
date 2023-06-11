@@ -47,13 +47,14 @@ public class NodeMain {
                 Nodo node = clientManager.createNodeToShare(files);
                 try{
                     Registry registry = LocateRegistry.getRegistry("localhost", 1099);
+                    
                     InformsItstheTracker informsItsTracker = (InformsItstheTracker) registry.lookup("InformsItstheTracker");
                     informsItsTracker.SharesIP(node);
                 }
                 catch(Exception ex){
-                    
+                    ex.printStackTrace();
                 }
-                ServerClientRMI server = new ServerClientRMI(6000, "FileTransfers");
+                ServerClientRMI server = new ServerClientRMI(1100, "FileTransfers");
                 server.start();
                 
             }
