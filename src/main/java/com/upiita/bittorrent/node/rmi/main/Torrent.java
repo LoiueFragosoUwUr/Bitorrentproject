@@ -100,7 +100,7 @@ public class Torrent extends TimerTask{
                  
                  for(Nodo n: nodos){
                      
-                     String nombreNodo = nodo.getIp() + "_" + nodo.getFiles().get(0).getNameFile();
+                     String nombreNodo = n.getIp() + "_" + nodo.getFiles().get(0).getNameFile();
                      boolean e = false;
                      for(int i = 0; i< hilosDescargas.size(); i++){
                          
