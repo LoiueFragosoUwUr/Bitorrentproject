@@ -11,6 +11,7 @@ import com.upiita.bittorrent.node.controller.ClientManager;
 import com.upiita.bittorrent.node.rmi.ClientRMI;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.net.InetAddress;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Properties;
@@ -46,7 +47,9 @@ public class DownloadClientRMI extends Thread{
             
             for(int i = 0; i < fileInformation.getFragments().size(); i++){      
                if(!clientManager.verifyFragment(fileInformation.getNameFile(), fileInformation.getFragments().get(i))){
-                   byte [] buffer = clientRMI.transferFile(fileInformation.getNameFile(), fileInformation.getFragments().get(i));
+                   InetAddress hostip = InetAddress.getLocalHost();
+                        String hostaddress = hostip.getHostAddress();
+                   byte [] buffer = clientRMI.transferFile(fileInformation.getNameFile(), fileInformation.getFragments().get(i), hostaddress);
                    try(FileOutputStream fos = new FileOutputStream(System.getProperty("user.dir") + props.getProperty("staticDirectoryClient") + props.getProperty("directoryFragments")
                            + "\\" + ClientManager.accoplishFragment(fileInformation.getNameFile(), fileInformation.getFragments().get(i)))){
                        fos.write(buffer);

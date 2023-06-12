@@ -14,7 +14,7 @@ import java.rmi.RemoteException;
  */
 public interface ClientRMI extends Remote{
     
-    public byte[] transferFile(String fileName, int fragment) throws RemoteException;
+    public byte[] transferFile(String fileName, int fragment, String ip) throws RemoteException;
     public boolean ackConnection() throws RemoteException;
     
 }

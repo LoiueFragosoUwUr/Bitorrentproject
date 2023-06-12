@@ -34,7 +34,10 @@ public class ControllerClientRMI extends UnicastRemoteObject implements ClientRM
     }
 
     @Override
-    public byte[] transferFile(String fileName, int fragment) throws RemoteException{
+    public byte[] transferFile(String fileName, int fragment, String ip) throws RemoteException{
+        
+        System.out.println("El nodo: " + ip + " ha solicitado el fragmento: " + fragment + "del archivo: " + fileName);
+        
         byte [] data = null;
         ClientManager clientManager = new ClientManager();
         List<FileInformation> listFiles = clientManager.getFilesToShare();
@@ -68,6 +71,8 @@ public class ControllerClientRMI extends UnicastRemoteObject implements ClientRM
 
     @Override
     public boolean ackConnection() throws RemoteException{
+        
+        System.out.println("El tracker solicita confirmación de conexion");
         return true;
     }
     
