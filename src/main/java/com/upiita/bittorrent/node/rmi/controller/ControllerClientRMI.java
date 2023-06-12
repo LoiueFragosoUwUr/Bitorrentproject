@@ -50,7 +50,7 @@ public class ControllerClientRMI extends UnicastRemoteObject implements ClientRM
         
         try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream( System.getProperty("user.dir") + props.getProperty("staticDirectoryClient")
                 + props.getProperty("directoryFragments") + "\\" + ClientManager.accoplishFragment(fileName, fragment)))){
-            byte [] buffer = new byte[(int) file.getSize()/(Integer.parseInt(props.getProperty("sizePackage")))];
+            byte [] buffer = new byte[(int) Math.ceil(file.getSize()/(Double.parseDouble(props.getProperty("sizePackage"))))];
             
             int bytesRead = 0;
             

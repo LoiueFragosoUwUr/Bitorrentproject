@@ -52,7 +52,7 @@ public class ClientManager {
                
                File file = new File(absoluteDirectory + "\\"+fileName);
                List<Integer> listFragments = new ArrayList<>();
-               for(int i = 0; i < 10; i++){
+               for(int i = 0; i < Integer.parseInt(props.getProperty("packageSize")); i++){
                    listFragments.add(i+1);
                    
                     
@@ -131,7 +131,7 @@ public class ClientManager {
     private void fragmentFile(FileInputStream fis, int size, String fileName){
         
         try(BufferedInputStream bis = new BufferedInputStream(fis)){
-            int newSize = size/Integer.parseInt(props.getProperty("sizePackage"));
+            int newSize = (int)Math.ceil(((double)size)/Double.parseDouble(props.getProperty("sizePackage")));
             byte  [] buffer = new byte[newSize];
             int read = 0;
             int i = 0;

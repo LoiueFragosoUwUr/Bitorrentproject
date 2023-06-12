@@ -13,6 +13,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Timer;
@@ -28,7 +29,8 @@ public class Torrent extends TimerTask{
     List<DownloadClientRMI> hilosDescargas;
     
     public Torrent(){
-        Properties props = new Properties();
+        hilosDescargas = new ArrayList<>();
+        props = new Properties();
         try(FileInputStream fis = new FileInputStream(System.getProperty("user.dir") + "\\bittorrent.properties")){
             props.load(fis);
         }
@@ -49,7 +51,7 @@ public class Torrent extends TimerTask{
     }
     
     public void rebuildFiles(){
-        String directory = System.getProperty("user.dir") + props.getProperty("staticDirectoryClient") + props.getProperty("directoryTorrents");
+        String directory = System.getProperty("user.dir") + props.getProperty("staticDirectoryClient") + props.getProperty("directoryTorrent");
         File direc = new File(directory);
         String [] listFile = direc.list();
         
@@ -61,17 +63,19 @@ public class Torrent extends TimerTask{
             
             Nodo nodo = nodos.get(0);
             if(sizeFile == 0){
-                sizeFile = (int) nodo.getFiles().get(0).getSize();
+                sizeFile = (int) Math.ceil(nodo.getFiles().get(0).getSize());
             }
              byte [] buffer = new byte[(int) sizeFile];
-             int chunkSize = sizeFile/Integer.parseInt(props.getProperty("sizePackage"));
+             int chunkSize = (int)Math.ceil((double)sizeFile/Double.parseDouble(props.getProperty("sizePackage")));
              int offset = 0;
-             for(int i = 0; i < chunkSize; i++){
-                 String fragmentName =  System.getProperty("user.dir") + props.getProperty("staticDirectoryClient") + props.getProperty("directoryFragments")  + ClientManager.accoplishFragment(nodo.getFiles().get(i).getNameFile(), i+1);
+             for(int i = 0; i < Integer.parseInt(props.getProperty("sizePackage")); i++){
+                 String fragmentName =  System.getProperty("user.dir") + props.getProperty("staticDirectoryClient") + props.getProperty("directoryFragments")  + "\\"+ ClientManager.accoplishFragment(nodo.getFiles().get(0).getNameFile(), i+1);
 
                  try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream(fragmentName))){
                      int bytesRead = 0;
-                     bytesRead = bis.read(buffer, offset, (int)chunkSize);
+                     int chunkSizeAux = chunkSize*(i+1) > sizeFile ? sizeFile-(chunkSize)*i : chunkSize;
+                     
+                     bytesRead = bis.read(buffer, offset, (int)chunkSizeAux);
                      offset += bytesRead;
                      fragmentsDownloaded++;
                  }
@@ -80,8 +84,8 @@ public class Torrent extends TimerTask{
                  }
              }
              
-             if(fragmentsDownloaded >= 10){
-                 String fileName = System.getProperty("user.dir") + props.getProperty("staticDirectoryClient") + props.getProperty("directoryFiles")  + nodo.getFiles().get(0).getNameFile();
+             if(fragmentsDownloaded >= Integer.parseInt(props.getProperty("sizePackage"))-1){
+                 String fileName = System.getProperty("user.dir") + props.getProperty("staticDirectoryClient") + props.getProperty("directoryFiles")  + "\\" +nodo.getFiles().get(0).getNameFile();
                 try(FileOutputStream fos = new FileOutputStream(fileName)){
                     fos.write(buffer);
                     fos.close();
@@ -100,7 +104,7 @@ public class Torrent extends TimerTask{
                      boolean e = false;
                      for(int i = 0; i< hilosDescargas.size(); i++){
                          
-                         if(hilosDescargas.get(i).isAlive()){
+                         if(!hilosDescargas.get(i).isAlive()){
                              hilosDescargas.remove(i);
                              i--;
                          }
