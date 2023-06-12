@@ -81,18 +81,21 @@ public class NodeMain {
                         printList(listFiles);
                         
                         System.out.println("Escribe el nombre de un archivo");
+                        System.out.println("Escribe \"Cancelar\" para cancelar");
                         String nombre = scanner.nextLine();
-                        List<Nodo> nodos = informsItsTracker.SendsIP(nombre, hostaddress);
                         
-                        if(nodos.isEmpty()){
-                            System.out.println("No existe el archivo solicitado, revisa el nombre");
+                        if(!nombre.equalsIgnoreCase("Cancelar")){
+                            List<Nodo> nodos = informsItsTracker.SendsIP(nombre, hostaddress);
+                        
+                            if(nodos.isEmpty()){
+                                System.out.println("No existe el archivo solicitado, revisa el nombre");
+                            }
+                            else{
+                                TorrentDAO torrentDao = new FileTorrentDAO(nodos.get(0).getFiles().get(0).getNameFile() + props.getProperty("extensionTorrent"));
+                                torrentDao.saveFile(nodos);
+                            }
+                        
                         }
-                        else{
-                            TorrentDAO torrentDao = new FileTorrentDAO(nodos.get(0).getFiles().get(0).getNameFile() + props.getProperty("extensionTorrent"));
-                            torrentDao.saveFile(nodos);
-                        }
-                        
-                        
                         
                     }
                     catch(Exception ex){
@@ -123,18 +126,19 @@ public class NodeMain {
                         catch(Exception ex){
                             ex.printStackTrace();
                         }
-                        if(server != null){
-                            server.interrupt();
+                        if(server == null){
+                            server = new ServerClientRMI(Integer.parseInt(props.getProperty("portClient")), props.getProperty("lookupClient"));
+                            
                         }
-                        server = new ServerClientRMI(Integer.parseInt(props.getProperty("portClient")), props.getProperty("lookupClient"));
-                        server.start();
+                        server.startServer();
+                        
 
                     }
                     else{
                         estado = "Leecher";
                         if(server != null){
-                            server.interrupt();
-                            System.out.println("Los recursos ya no se estan compartiendo");
+                            server.stopRMI();
+                            
                         }
                     }
                 }
@@ -147,7 +151,7 @@ public class NodeMain {
         try{
             torrent.cancel();
             if(server != null){
-                server.interrupt();
+                server.stopRMI();
             }
             
             System.exit(0);
