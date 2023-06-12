@@ -46,6 +46,8 @@ public class FirstStepTracker extends UnicastRemoteObject implements  InformsIts
     public ArrayList<Nodo> SendsIP(String fileName) throws RemoteException, IOException {
         DAO fileNodoDAO = new FileNodoDAO();
         ArrayList<Nodo> nodes = (ArrayList<Nodo>) fileNodoDAO.list();
+        if (nodes.equals(null)!= true){
+            
         for (int i = 0; i < nodes.size(); i++) {
             List<FileInformation> fileInformation = new ArrayList<>();
             
@@ -70,6 +72,7 @@ public class FirstStepTracker extends UnicastRemoteObject implements  InformsIts
             
             
             }
+        }
         }
         
         return nodes;
