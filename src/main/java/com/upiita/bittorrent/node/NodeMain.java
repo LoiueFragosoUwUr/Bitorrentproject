@@ -37,6 +37,7 @@ public class NodeMain {
     
     private static ServerClientRMI server = null;
     private static Torrent torrent;
+    private static String estado = "Leecher";
     public static void main(String[] args) throws UnknownHostException {
         char opt;
         Scanner scanner = new Scanner(System.in);
@@ -57,6 +58,7 @@ public class NodeMain {
             System.out.println("Bienvenido a BitTorrentUPIITA");
             
             do{
+                System.out.println("Estado: " + estado);
                 System.out.println("¿Que deseas?");
                 System.out.println("a. Ver descargas");
                 System.out.println("b. Descargar un archivo");
@@ -106,6 +108,7 @@ public class NodeMain {
                     opt = scanner.nextLine().charAt(0);
 
                     if(opt == 's'){
+                        estado = "Seeder";
                         clientManager = new ClientManager();
                         List<FileInformation> files = clientManager.getFilesToShare();
                         Nodo node = clientManager.createNodeToShare(files);
@@ -128,6 +131,7 @@ public class NodeMain {
 
                     }
                     else{
+                        estado = "Leecher";
                         if(server != null){
                             server.interrupt();
                             System.out.println("Los recursos ya no se estan compartiendo");
