@@ -52,7 +52,7 @@ public class ClientManager {
                
                File file = new File(absoluteDirectory + "\\"+fileName);
                List<Integer> listFragments = new ArrayList<>();
-               for(int i = 0; i < Integer.parseInt(props.getProperty("packageSize")); i++){
+               for(int i = 0; i < Integer.parseInt(props.getProperty("sizePackage")); i++){
                    listFragments.add(i+1);
                    
                     
