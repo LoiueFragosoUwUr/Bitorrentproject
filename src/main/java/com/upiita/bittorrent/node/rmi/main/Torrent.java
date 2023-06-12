@@ -107,9 +107,7 @@ public class Torrent extends TimerTask{
                          if(!hilosDescargas.get(i).isAlive()){
                              hilosDescargas.remove(i);
                              i--;
-                         }
-                         
-                         if(hilosDescargas.get(i).getName().equals(nombreNodo)){
+                         }else if(hilosDescargas.get(i).getName().equals(nombreNodo)){
                             e = true;
                             break;
                          }
