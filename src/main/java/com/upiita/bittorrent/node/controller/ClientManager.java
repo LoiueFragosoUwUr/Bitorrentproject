@@ -101,6 +101,10 @@ public class ClientManager {
                }
            }
            
+           for(int i = 0; i < files.size();i++){
+               System.out.println("Compartiendo: " + files.get(i).getNameFile());
+           }
+           
            return files;
        }
        
