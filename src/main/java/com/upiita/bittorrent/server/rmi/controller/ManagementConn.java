@@ -43,7 +43,8 @@ public class ManagementConn extends TimerTask {
     private void manageSeeders() {
         DAO fileNodoDAO = new FileNodoDAO();
         List<Nodo> nodeList = fileNodoDAO.list();
-
+        if (nodeList!= null) {
+            
         for (int i = 0; i < nodeList.size(); i++) {
             try {
                 Registry registry = LocateRegistry.getRegistry(nodeList.get(i).getIp(), nodeList.get(i).getPort());
@@ -57,6 +58,7 @@ public class ManagementConn extends TimerTask {
                 fileNodoDAO.delete(nodeList.get(i).getIp());
             }
 
+        }
         }
     }
 }
