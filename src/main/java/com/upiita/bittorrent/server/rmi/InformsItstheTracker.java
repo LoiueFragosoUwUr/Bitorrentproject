@@ -18,10 +18,9 @@ import java.rmi.RemoteException;
 import java.util.List;
 public interface InformsItstheTracker extends Remote{
         
-        String ImtheTracker() throws RemoteException;
         void SharesIP(Nodo node) throws RemoteException,IOException;
-        List <Nodo> SendsIP(String fileName)throws RemoteException,IOException;
-        List <FileInformation> ListFiles() throws RemoteException;
+        List <Nodo> SendsIP(String fileName, String IP)throws RemoteException,IOException;
+        List <FileInformation> ListFiles(String IP) throws RemoteException;
                
 
 

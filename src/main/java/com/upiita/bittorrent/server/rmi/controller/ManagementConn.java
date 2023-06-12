@@ -49,12 +49,13 @@ public class ManagementConn extends TimerTask {
             try {
                 Registry registry = LocateRegistry.getRegistry(nodeList.get(i).getIp(), nodeList.get(i).getPort());
                 ClientRMI clienteRMI = (ClientRMI) registry.lookup("FileTransfers");
+                System.out.println(" Confirmando conexion con el nodo: "+nodeList.get(i).getIp());
                 if (clienteRMI.ackConnection()) {
-                    System.out.println("Continua conectado||still connected");
+                    System.out.println("Continua conectado el nodo: "+nodeList.get(i).getIp()+" ||still connected");
 
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println(" El nodo: "+nodeList.get(i).getIp()+" ya no esta conectado.");
                 fileNodoDAO.delete(nodeList.get(i).getIp());
             }
 

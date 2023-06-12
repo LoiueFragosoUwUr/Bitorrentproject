@@ -26,13 +26,10 @@ import java.util.Properties;
  */
 public class FirstStepTracker extends UnicastRemoteObject implements  InformsItstheTracker {
 
-    public String ImtheTracker() {
-        return "ImtheTracker";
-    }
 
     @Override
     public void SharesIP(Nodo node) throws IOException {
-
+        System.out.println("La IP : "+node.getIp()+" se ha conectado al tracker");
         DAO fileNodoDAO = new FileNodoDAO();
         fileNodoDAO.create(node);
 
@@ -43,7 +40,8 @@ public class FirstStepTracker extends UnicastRemoteObject implements  InformsIts
     }
 //    @Override
 
-    public ArrayList<Nodo> SendsIP(String fileName) throws RemoteException, IOException {
+    public ArrayList<Nodo> SendsIP(String fileName, String IP) throws RemoteException, IOException {
+        System.out.println("El nodo: "+IP+" ha solicitado el archivo: "+ fileName );
         DAO fileNodoDAO = new FileNodoDAO();
         ArrayList<Nodo> nodes = (ArrayList<Nodo>) fileNodoDAO.list();
         if (nodes.equals(null)!= true){
@@ -105,7 +103,8 @@ public class FirstStepTracker extends UnicastRemoteObject implements  InformsIts
     }
 
     @Override
-    public ArrayList<FileInformation> ListFiles() {
+    public ArrayList<FileInformation> ListFiles(String IP) {
+        System.out.println(" El nodo: "+IP+" quiere conocer los archivos en la red.");
         DAO nodoDAO = new FileNodoDAO();
         List<Nodo> nodos = nodoDAO.list();
         ArrayList<FileInformation> files = new ArrayList<>();
